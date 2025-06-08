@@ -59,32 +59,44 @@
     };
 
     async function loadIncidents() {
-      const { data, error } = await supabase.from('incidents').select('*');
+      console.log("📦 Loading incidents...");
+
+      const { data, error } = await supabase.from("incidents").select("*");
+
       if (error) {
-        console.error('Failed to load incidents:', error);
+        console.error("❌ Supabase error:", error);
         return;
       }
-	  
-	  console.log("LOADING MARKERS");
 
-      data.forEach(incident => {
+      if (!data || data.length === 0) {
+        console.warn("⚠️ No incident data found.");
+        return;
+      }
+
+      data.forEach((incident, i) => {
+        console.log(`Row ${i}:`, incident);
+
         const lat = parseFloat(incident.lat);
         const lng = parseFloat(incident.lng);
+
+        if (isNaN(lat) || isNaN(lng)) {
+          console.warn(`❌ Skipping row with invalid coordinates:`, incident);
+          return;
+        }
 
         const marker = L.circleMarker([lat, lng], {
           radius: 8,
           fillColor: typeColors[incident.type] || 'gray',
-          color: '#000',
+          color: "#000",
           weight: 1,
           opacity: 1,
           fillOpacity: 0.8
         }).addTo(map);
 
-
         const content = `
           <strong>Type:</strong> ${incident.type}<br>
           <strong>Street:</strong> ${incident.street}<br>
-          <strong>GPS:</strong> ${incident.lat.toFixed(5)}, ${incident.lng.toFixed(5)}<br>
+          <strong>GPS:</strong> ${lat.toFixed(5)}, ${lng.toFixed(5)}<br>
           <strong>Source:</strong> <a href="${incident.source_url}" target="_blank">View</a>
         `;
 
@@ -99,8 +111,9 @@
           document.getElementById('infoContent').innerHTML = content;
           document.getElementById('infoCard').style.display = 'block';
         });
-      });
-    }
+    });
+}
+
 
     loadIncidents();
   </script>
