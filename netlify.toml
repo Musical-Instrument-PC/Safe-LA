@@ -1,0 +1,5 @@
+[[plugins]]
+package = "netlify-plugin-inlinesource"
+
+[[inlinesource]]
+patterns = ["*.html"]
