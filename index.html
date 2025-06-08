@@ -29,21 +29,16 @@
 <body>
   <div id="map"></div>
   <div id="infoCard" class="info-card" style="display: none;">
-    <span class="close" onclick="document.getElementById('infoCard').style.display='none'">×</span>
+    <span class="close" onclick="document.getElementById('infoCard').style.display='none'">&times;</span>
     <div id="infoContent"></div>
   </div>
 
-  <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.3/dist/umd/supabase.min.js"></script>
-
   <script>
     const SUPABASE_URL = "{{ SUPABASE_URL }}";
     const SUPABASE_ANON_KEY = "{{ SUPABASE_ANON_KEY }}";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-	
-	console.log("Supabase initialized");
 
     const map = L.map('map').setView([34.0522, -118.2437], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -57,11 +52,9 @@
     };
 
     async function loadIncidents() {
-      const { data, error } = await supabase
-        .from('incidents')
-        .select('*');
+      const { data, error } = await supabase.from('incidents').select('*');
       if (error) {
-        console.error('Error loading incidents:', error);
+        console.error('Failed to load incidents:', error);
         return;
       }
 
@@ -82,14 +75,14 @@
           <strong>Source:</strong> <a href="${incident.source_url}" target="_blank">View</a>
         `;
 
-        marker.on('mouseover', e => {
+        marker.on('mouseover', () => {
           if (window.innerWidth > 768) {
             document.getElementById('infoContent').innerHTML = content;
             document.getElementById('infoCard').style.display = 'block';
           }
         });
 
-        marker.on('click', e => {
+        marker.on('click', () => {
           document.getElementById('infoContent').innerHTML = content;
           document.getElementById('infoCard').style.display = 'block';
         });
