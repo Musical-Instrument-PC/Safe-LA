@@ -42,6 +42,8 @@
     const SUPABASE_URL = "{{ SUPABASE_URL }}";
     const SUPABASE_ANON_KEY = "{{ SUPABASE_ANON_KEY }}";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+	
+	console.log("Supabase initialized");
 
     const map = L.map('map').setView([34.0522, -118.2437], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
