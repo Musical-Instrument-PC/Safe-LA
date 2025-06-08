@@ -47,7 +47,7 @@
   
   <script src="config.js"></script>
   <script>
-    const supabase = supabase.createClient(
+    const supabase = window.supabase.createClient(
       window.ENV.SUPABASE_URL,
       window.ENV.SUPABASE_ANON_KEY
     );
