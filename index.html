@@ -64,6 +64,8 @@
         console.error('Failed to load incidents:', error);
         return;
       }
+	  
+	  console.log("LOADING MARKERS");
 
       data.forEach(incident => {
         const marker = L.circleMarker([incident.lat, incident.lng], {
